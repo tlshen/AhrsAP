@@ -91,14 +91,14 @@ class GPanButton extends GButton {
 
 // this is the only bit that's needed to show a map:
 InteractiveMap map;
-
+int BtnYOffset = 20;
 // buttons take x,y and width,height:
-GZoomButton out = new GZoomButton(5,5,14,14,false);
-GZoomButton in = new GZoomButton(22,5,14,14,true);
-GPanButton up = new GPanButton(14,25,14,14,UP);
-GPanButton down = new GPanButton(14,57,14,14,DOWN);
-GPanButton left = new GPanButton(5,41,14,14,LEFT);
-GPanButton right = new GPanButton(22,41,14,14,RIGHT);
+GZoomButton out = new GZoomButton(5,5+BtnYOffset,14,14,false);
+GZoomButton in = new GZoomButton(22,5+BtnYOffset,14,14,true);
+GPanButton up = new GPanButton(14,25+BtnYOffset,14,14,UP);
+GPanButton down = new GPanButton(14,57+BtnYOffset,14,14,DOWN);
+GPanButton left = new GPanButton(5,41+BtnYOffset,14,14,LEFT);
+GPanButton right = new GPanButton(22,41+BtnYOffset,14,14,RIGHT);
 
 // all the buttons in one place, for looping:
 GButton[] buttons = { 
@@ -207,7 +207,7 @@ void DrawGPS() {
     noStroke();
     rect(5, height-5-g.textSize, textWidth("mouse: " + location), g.textSize+textDescent());
     fill(255,255,0);
-    textAlign(LEFT, BOTTOM);
+    //textAlign(LEFT, BOTTOM);
     text("mouse: " + location, 5, height-5);
 
     // grab the center
@@ -219,8 +219,8 @@ void DrawGPS() {
     float rw = textWidth("map: " + location);
     rect(width-5-rw, height-5-g.textSize, rw, g.textSize+textDescent());
     fill(255,255,0);
-    textAlign(RIGHT, BOTTOM);
-    text("map: " + location, width-5, height-5);
+    //textAlign(RIGHT, BOTTOM);
+    text("map: " + location, width-5-rw, height-5);
 
     location = new Location(51.500, -0.126);
     Point2f p = map.locationPoint(location);
@@ -309,6 +309,7 @@ void mouseClicked() {
 }
 void ClickTabGPS()
 {
+
 }
 void ButtonGPS()
 {

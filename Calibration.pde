@@ -378,4 +378,5 @@ void ClickTabCalibration()
   btnAccCalibrate.show(); 
   btnAccReset.show();
   btnAccStop.show();
+  cursor(ARROW);
 }

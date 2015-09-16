@@ -141,5 +141,6 @@ void ClickTabRC()
   delay(100);
   myPort.clear();
   myPort.write("@ss"); 
+  cursor(ARROW);
   
 }

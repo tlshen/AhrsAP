@@ -201,5 +201,6 @@ void ClickTabAttitude()
   myPort.clear();  // Clear input buffer up to here
   myPort.write("@ss");  
   println("in attitude tab");
+  cursor(ARROW);
 }
 

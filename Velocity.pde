@@ -212,4 +212,6 @@ void ClickTabVelocity()
     Velocity();
   else
     Baro();
+  
+  cursor(ARROW);
 }

@@ -529,4 +529,5 @@ void ClickTabPID()
   btnLoadPID.show();
   btnStorePID.show();
   btnResetPID.show();
+  cursor(ARROW);
 }

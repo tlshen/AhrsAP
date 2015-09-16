@@ -133,6 +133,7 @@ void DrawTabCOM()
       }
     }
   }
+  cursor(ARROW);
 }
 
 
