@@ -3,7 +3,9 @@ import com.modestmaps.*;
 import com.modestmaps.core.*;
 import com.modestmaps.geo.*;
 import com.modestmaps.providers.*;
-
+int[] GPS_coord = new int[2];
+byte  GPS_numSat;
+byte  GPS_Fixed;
 class GButton {
   
   float x, y, w, h;
@@ -149,6 +151,8 @@ void setupGPS() {
 }
 
 void DrawGPS() {
+  
+  readGPS();
   background(0);
 
   // draw the map:
@@ -307,9 +311,24 @@ void mouseClicked() {
     map.panRight();
   }
 }
+void readGPS()
+{
+  while (myPort.available() >= 10)
+  { 
+    GPS_coord[0] = readInt32(myPort);
+    GPS_coord[1] = readInt32(myPort);
+    GPS_numSat = (byte)readChar(myPort);
+    GPS_Fixed = (byte)readChar(myPort);
+  }
+  println("LAT:"+GPS_coord[0]+"LON:"+ GPS_coord[1]+"Num:"+GPS_numSat+"Fix:"+GPS_Fixed);
+}
 void ClickTabGPS()
 {
-
+  myPort.write("@sp"); 
+  myPort.write("@msg"); 
+  delay(100);
+  myPort.clear();  // Clear input buffer up to here
+  myPort.write("@ss");  
 }
 void ButtonGPS()
 {
