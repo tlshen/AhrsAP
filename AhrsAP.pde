@@ -170,6 +170,15 @@ public void addTabs(){
     .setLabel("RC")
     .hide()
     .setId(6);
+    
+    cp5.addTab("GPS")
+    .activateEvent(true)
+    .setColorBackground(color(blue_))
+    .setColorLabel(color(255))
+    .setColorActive(color(green_))
+    .setLabel("GPS")
+    .hide()
+    .setId(7);
   }
  }
  String ActiveTab="default";
@@ -191,6 +200,9 @@ public void controlEvent(ControlEvent theEvent) {
     else if(tabN==6) {
       ClickTabRC();
     }
+    else if(tabN==7) {
+      ClickTabGPS();
+    }
   }
    if (theEvent.isGroup()) if (theEvent.name()=="Copter COM") {
     InitSerial(theEvent.group().value());
@@ -210,6 +222,7 @@ void CP5_init()
   PID_BOX();
   CalibrationBox();
   ButtonVelocity();
+  ButtonGPS();
   SliderRC();
 }
 void setup()
@@ -219,6 +232,8 @@ void setup()
 
     font = loadFont("data/Tahoma-48.vlw");
     CP5_init();
+    
+    setupGPS();
 }
 void setupStack() {
   int VersionCount=100;
@@ -335,6 +350,9 @@ void draw()
   }
   else if(tabN==6) {
     DrawTabRC();
+  }
+  else if(tabN==7) {
+    DrawGPS();
   }
 }
 void keyPressed() {

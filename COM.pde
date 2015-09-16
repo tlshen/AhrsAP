@@ -123,6 +123,7 @@ void DrawTabCOM()
       cp5.getTab("Velocity").show();
       cp5.getTab("Calibration").show();
       cp5.getTab("RC").show();
+      cp5.getTab("GPS").show();
       textFont(pfont,16);
       text("Firmware Version:" + Version[1], 242, 300);
       text("Board    Version:" + Board[1], 242, 315);
