@@ -4,6 +4,7 @@ import com.modestmaps.core.*;
 import com.modestmaps.geo.*;
 import com.modestmaps.providers.*;
 int[] GPS_coord = new int[2];
+float[] GPS_coordf = new float[2];
 byte  GPS_numSat;
 byte  GPS_Fixed;
 class GButton {
@@ -86,6 +87,19 @@ class GPanButton extends GButton {
   }
   
 }
+class GPSButton extends GButton {
+  
+  GPSButton(float x, float y, float w, float h) {
+    super(x, y, w, h);
+  }
+  
+  void draw() {
+    super.draw();
+    stroke(0);
+    ellipse(x+w/2, y+h/2, w/2, h/2);
+  }
+  
+}
 //
 // This is a test of the interactive Modest Maps library for Processing
 // You must have modestmaps in your libraries folder, see INSTALL for details
@@ -101,10 +115,11 @@ GPanButton up = new GPanButton(14,25+BtnYOffset,14,14,UP);
 GPanButton down = new GPanButton(14,57+BtnYOffset,14,14,DOWN);
 GPanButton left = new GPanButton(5,41+BtnYOffset,14,14,LEFT);
 GPanButton right = new GPanButton(22,41+BtnYOffset,14,14,RIGHT);
+GPSButton gps = new GPSButton(14,90+BtnYOffset,14,14);
 
 // all the buttons in one place, for looping:
 GButton[] buttons = { 
-  in, out, up, down, left, right };
+  in, out, up, down, left, right, gps };
 
 PFont gfont;
 
@@ -226,10 +241,12 @@ void DrawGPS() {
     //textAlign(RIGHT, BOTTOM);
     text("map: " + location, width-5-rw, height-5);
 
-    location = new Location(51.500, -0.126);
+    //location = new Location(51.500, -0.126);
+    location = new Location(GPS_coordf[0],GPS_coordf[1]);
     Point2f p = map.locationPoint(location);
 
-    fill(0,255,128);
+    //fill(0,255,128);
+    fill(255,0,128);
     stroke(255,255,0);
     ellipse(p.x, p.y, 10, 10);
   }  
@@ -310,6 +327,14 @@ void mouseClicked() {
   else if (right.mouseOver()) {
     map.panRight();
   }
+  else if (gps.mouseOver()) {
+    //float sc = (float)map.sc;
+    
+    //int qsc = (int)sqrt(sc);
+    //println("sc:"+sc+",qsc:"+qsc);
+    //map.panRight();
+    map.setCenterZoom(new Location(GPS_coordf[0], GPS_coordf[1]), map.getZoom());  
+  }
 }
 void readGPS()
 {
@@ -317,6 +342,8 @@ void readGPS()
   { 
     GPS_coord[0] = readInt32(myPort);
     GPS_coord[1] = readInt32(myPort);
+    GPS_coordf[0] = (float)GPS_coord[0]/10000000;
+    GPS_coordf[1] = (float)GPS_coord[1]/10000000;
     GPS_numSat = (byte)readChar(myPort);
     GPS_Fixed = (byte)readChar(myPort);
   }
