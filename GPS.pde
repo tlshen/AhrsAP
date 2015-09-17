@@ -243,8 +243,16 @@ void DrawGPS() {
 
     //location = new Location(51.500, -0.126);
     location = new Location(GPS_coordf[0],GPS_coordf[1]);
-    Point2f p = map.locationPoint(location);
+    fill(0);
+    noStroke();
+    float gw = textWidth("gps: " + location);
+    rect(width/2-5-gw/2, height-5-g.textSize, gw, g.textSize+textDescent());
+    fill(255,255,0);
+    //textAlign(RIGHT, BOTTOM);
+    text("gps: " + location, width/2-5-gw/2, height-5);
+    
 
+    Point2f p = map.locationPoint(location);
     //fill(0,255,128);
     fill(255,0,128);
     stroke(255,255,0);
