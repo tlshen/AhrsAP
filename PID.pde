@@ -393,14 +393,27 @@ boolean readAltHoldPID()
 }
 void UpdateMotor()
 {
-   Motor[0].setValue(MotorPower[0]);
-   Motor[1].setValue(MotorPower[1]);
-   Motor[2].setValue(MotorPower[2]);
-   Motor[3].setValue(MotorPower[3]);
+  if(MotorPower[0]>0) {
+    Motor[0].setValue(MotorPower[0]);
+    Motor[1].setValue(0);
+  }
+  else {
+    Motor[1].setValue(-MotorPower[0]);
+    Motor[0].setValue(0);
+  }
+  if(MotorPower[1]<0) {
+    Motor[3].setValue(-MotorPower[1]);
+    Motor[2].setValue(0);
+  }
+  else {
+    Motor[3].setValue(0);
+    Motor[2].setValue(MotorPower[1]);
+  }
 }
 void MotorBar()
 {
   int MotorBar_W=30, MotorBar_H=100, MotorBar_X=210, MotorBar_Y=50, MotorText=20, MotorMin=1090,MotorMax=2000,MotorBar_PitchX=300,MotorBar_PitchY=250;
+ 
   Motor[3] = cp5.addSlider("Motor4",MotorMin,MotorMax,0,MotorBar_X,MotorBar_Y,MotorBar_W,MotorBar_H).setDecimalPrecision(0).setLabel("").hide().moveTo("PID");
   MotorLable[3] = cp5.addTextlabel("M4","M4",MotorBar_X,MotorBar_Y-MotorText).hide().moveTo("PID");
   Motor[0] = cp5.addSlider("Motor1",MotorMin,MotorMax,0,MotorBar_X+MotorBar_PitchX,MotorBar_Y,MotorBar_W,MotorBar_H).setDecimalPrecision(0).setLabel("").hide().moveTo("PID");
@@ -409,7 +422,6 @@ void MotorBar()
   MotorLable[2] = cp5.addTextlabel("M3","M3",MotorBar_X,MotorBar_Y+MotorBar_PitchY-MotorText).hide().moveTo("PID");
   Motor[1] = cp5.addSlider("Motor2",MotorMin,MotorMax,0,MotorBar_X+MotorBar_PitchX,MotorBar_Y+MotorBar_PitchY,MotorBar_W,MotorBar_H).setDecimalPrecision(0).setLabel("").hide().moveTo("PID");
   MotorLable[1] = cp5.addTextlabel("M2","M2",MotorBar_X+MotorBar_PitchX,MotorBar_Y+MotorBar_PitchY-MotorText).hide().moveTo("PID");
-  
 }
 void PID_BOX()
 {
@@ -432,6 +444,8 @@ void readMotors()
     MotorPower[1] = readInt16(myPort);
     MotorPower[2] = readInt16(myPort);
     MotorPower[3] = readInt16(myPort);
+    println("Motor:"+MotorPower[0]+MotorPower[1]);
+    
   }
 }
 boolean readPID()
@@ -486,6 +500,20 @@ void DrawTabPID()
 }
 void ClickTabPID()
 {
+  if(Board[1]==145) {
+    MotorLable[0].setText("MR_CW");
+    MotorLable[1].setText("MR_CCW");
+    MotorLable[2].setText("ML_CW");
+    MotorLable[3].setText("ML_CCW");
+    Motor[0].setMax(350);
+    Motor[1].setMax(350);
+    Motor[2].setMax(350);
+    Motor[3].setMax(350);
+    Motor[0].setMin(0);
+    Motor[1].setMin(0);
+    Motor[2].setMin(0);
+    Motor[3].setMin(0);
+  }
   Motor[0].show();
   MotorLable[0].show();
   Motor[1].show();
