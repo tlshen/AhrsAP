@@ -57,6 +57,7 @@ char mode = 0;
 int i, j;
 short[] Version = new short[2];
 short[] Board = new short[2];
+Button btnReportAHRS0,btnReportAHRS1;
 void CP5_ComPortBox()
 {
   loadButton=cp5.addButton("load")
@@ -116,7 +117,31 @@ void CP5_ComPortBox()
     .moveTo("default")
     ;
 }
-
+void ButtonAHRSReport()
+{
+  int offY=100,offX=700;
+   btnReportAHRS0=cp5.addButton("AHRS0")
+     .setValue(0)
+     .setPosition(offX,offY)
+     .setSize(120,80)   
+     .setColorBackground(#6060a0)
+     .setColorForeground(#8080d0)
+     .setColorActive(#a0a0f0)
+     .setColorCaptionLabel(#ffff00)
+     .moveTo("default")
+     .hide();
+     
+     btnReportAHRS1=cp5.addButton("AHRS1")
+     .setValue(0)
+     .setPosition(offX,offY+100)
+     .setSize(120,80)   
+     .setColorBackground(#6060a0)
+     .setColorForeground(#8080d0)
+     .setColorActive(#a0a0f0)
+     .setColorCaptionLabel(#ffff00)
+     .moveTo("default")
+     .hide();
+}
 public void addTabs(){
   if(cp5!=null) {
     
@@ -218,12 +243,14 @@ void CP5_init()
   addTabs();
   cp5.setFont(pfont);
   CP5_ComPortBox();
+  ButtonAHRSReport();
   MotorBar();
   PID_BOX();
   CalibrationBox();
   ButtonVelocity();
   ButtonGPS();
   SliderRC();
+  ButtonAHRSReport();
 }
 void setup()
 {

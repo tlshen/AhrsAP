@@ -26,6 +26,7 @@ PrintWriter output;
 BufferedReader reader;
 Serial myPort;
 boolean EnterFirstTab = true;
+
 void SaveSerialPort() {
     output = createWriter(portnameFile);
     output.print( portName + ';' + GUI_BaudRate);
@@ -87,6 +88,8 @@ void InitSerial(float portValue) {
       init_com=1;
       g_serial.buffer(256);
       btnQConnect.hide();
+      btnReportAHRS0.show();
+      btnReportAHRS1.show();
     }
   } else {
     txtWhichcom.setValue("Comm Closed");
@@ -100,9 +103,19 @@ void InitSerial(float portValue) {
     cp5.getTab("Velocity").hide();
     cp5.getTab("Calibration").hide();
     cp5.getTab("RC").hide();
+    btnReportAHRS0.hide();
+    btnReportAHRS1.hide();
     synched = false;
     EnterFirstTab = true;
   }
+}
+public void AHRS0(int theValue) {
+  if(synched)
+    myPort.write("@sa0");
+}
+public void AHRS1(int theValue) {
+  if(synched)
+    myPort.write("@sa1");
 }
 public void bQCONN(){
   ReadSerialPort();

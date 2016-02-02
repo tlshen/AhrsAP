@@ -46,8 +46,8 @@ void BoxYRP(int index)
   cp5.addNumberbox(PID_NumBox[index][0])
      .setPosition(offX+index*90,70*1+offY)
      .setSize(80,40)
-     .setRange(0,50)
-     .setMultiplier(0.1) 
+     .setRange(0,200)
+     .setMultiplier(0.01) 
      .setDirection(Controller.HORIZONTAL) 
      .setValue(5.5)
      .hide()
@@ -56,8 +56,8 @@ void BoxYRP(int index)
      cp5.addNumberbox(PID_NumBox[index][1])
      .setPosition(offX+index*90,70*2+offY)
      .setSize(80,40)
-     .setRange(0,10)
-     .setMultiplier(0.1) 
+     .setRange(0,150)
+     .setMultiplier(0.01) 
      .setDirection(Controller.HORIZONTAL)
      .setValue(0)
      .hide()
@@ -67,7 +67,7 @@ void BoxYRP(int index)
      .setPosition(offX+index*90,70*3+offY)
      .setSize(80,40)
      .setRange(0,50)
-     .setMultiplier(0.1)
+     .setMultiplier(0.01)
      .setDirection(Controller.HORIZONTAL)
      .setValue(0)
      .hide()
@@ -82,7 +82,7 @@ void BoxRateYRP(int index)
      .setPosition(offX+index*90,70*1+offY)
      .setSize(80,40)
      .setRange(0,50)
-     .setMultiplier(0.05)
+     .setMultiplier(0.01)
      .setDirection(Controller.HORIZONTAL) 
      .setValue(13)
      .hide()
@@ -92,7 +92,7 @@ void BoxRateYRP(int index)
      .setPosition(offX+index*90,70*2+offY)
      .setSize(80,40)
      .setRange(0,200)
-     .setMultiplier(0.1) 
+     .setMultiplier(0.01) 
      .setDirection(Controller.HORIZONTAL)
      .setValue(0)
      .hide()
@@ -126,7 +126,7 @@ void BoxAltHold(int index)
      cp5.addNumberbox(AltHoldPID_NumBox[1])
      .setPosition(offX+index*90,70*2+offY)
      .setSize(80,40)
-     .setRange(0,5)
+     .setRange(0,150)
      .setMultiplier(0.01)
      .setDirection(Controller.HORIZONTAL) 
      .setValue(0.18)
@@ -505,10 +505,10 @@ void ClickTabPID()
     MotorLable[1].setText("MR_CCW");
     MotorLable[2].setText("ML_CW");
     MotorLable[3].setText("ML_CCW");
-    Motor[0].setMax(1000);
-    Motor[1].setMax(1000);
-    Motor[2].setMax(1000);
-    Motor[3].setMax(1000);
+    Motor[0].setMax(3000);
+    Motor[1].setMax(3000);
+    Motor[2].setMax(3000);
+    Motor[3].setMax(3000);
     Motor[0].setMin(0);
     Motor[1].setMin(0);
     Motor[2].setMin(0);
