@@ -250,10 +250,12 @@ void UpdateMagCalibrateBar()
 void readEuler()
 {
  int i;
- char End;
+ char Start;
  if(Eulering) {
-    while (myPort.available() >= 16)
+    while (myPort.available() >= 17)
     { 
+      Start = readChar(myPort);
+      if(Start!='@') return;
       Euler[0] = readFloat(myPort);
       Euler[1] = readFloat(myPort);
       Euler[2] = readFloat(myPort);
@@ -333,7 +335,7 @@ void DrawTabCalibration()
   else
     fill(#ffffff);
   
-  text("North:"+ Euler[2], 80, 750);
+  text("North:"+ (int)Euler[2], 80, 750);
   
   if(Euler[0]>1||Euler[0]<-1||Euler[1]>1||Euler[1]<-1)
     fill(#ff0000);

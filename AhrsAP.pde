@@ -252,10 +252,15 @@ void CP5_init()
   SliderRC();
   ButtonAHRSReport();
 }
+void SetupBackground()
+{
+  PImage img = loadImage("Form_3Dcuboid/AHRS_Background.jpg");
+  background(img);
+}
 void setup()
 {
     size(VIEW_SIZE_X, VIEW_SIZE_Y,OPENGL);
-    frameRate(20); 
+    frameRate(50); 
 
     font = loadFont("data/Tahoma-48.vlw");
     CP5_init();
@@ -360,6 +365,7 @@ boolean Sync2NvtFly()
 
 void draw()
 {
+  SetupBackground();
   if(tabN==1) {
     DrawTabCOM();
   }
@@ -381,6 +387,7 @@ void draw()
   else if(tabN==7) {
     DrawGPS();
   }
+  
 }
 void keyPressed() {
   switch (key) {

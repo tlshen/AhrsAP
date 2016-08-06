@@ -125,7 +125,7 @@ public void bQCONN(){
 }
 void DrawTabCOM()
 {
-  background(#000000);
+  //background(#000000);
   fill(#ffffff);
   if(g_serial!=null) {
     if(!Sync2NvtFly())

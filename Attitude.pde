@@ -15,53 +15,81 @@
  */
 void buildBoxShape()
 {
-    PImage img = loadImage("Form_3Dcuboid/Bottom.png");
+    PImage imgZP = loadImage("Form_3Dcuboid/AHRS_Front.jpg");
+    PImage imgZN = loadImage("Form_3Dcuboid/AHRS_Back.jpg");
+    PImage imgXP = loadImage("Form_3Dcuboid/AHRS_Left.jpg");
+    PImage imgXN = loadImage("Form_3Dcuboid/AHRS_Right.jpg");
+    //PImage imgYP = loadImage("Form_3Dcuboid/Front.png");
+    PImage imgYP = loadImage("Form_3Dcuboid/AHRS_Buttom.jpg");
+    //PImage imgYN = loadImage("Form_3Dcuboid/Back.png");
+    PImage imgYN = loadImage("Form_3Dcuboid/AHRS_Top.jpg");
+    int W = 20;
+    int L = 20;
+    int H = 5;
     noStroke();
-    beginShape(QUADS);
-
+    
     //Z+
+    beginShape(QUADS);
     fill(#00ff00);
-    //texture(img);
-    vertex(-30, -5, 20, 0, 0);
-    vertex(30, -5, 20, 1066, 0);
-    vertex(30, 5, 20, 1066, 712);
-    vertex(-30, 5, 20, 0 ,712);
-
+    texture(imgZP);
+    vertex(-W, -H, L, 0, 0);
+    vertex(W, -H, L, 1066, 0);
+    vertex(W, H, L, 1066, 357);
+    vertex(-W, H, L, 0 ,357);
+    endShape();
+    
     //Z-
+    beginShape(QUADS);
     fill(#0000ff);
-    vertex(-30, -5, -20);
-    vertex(30, -5, -20);
-    vertex(30, 5, -20);
-    vertex(-30, 5, -20);
-
+    texture(imgZN);
+    vertex(-W, -H, -L, 1066, 0);
+    vertex(W, -H, -L, 0, 0);
+    vertex(W, H, -L, 0, 357);
+    vertex(-W, H, -L, 1066 ,357);
+    endShape();
+    
     //X-
+    beginShape(QUADS);
     fill(#ff0000);
-    vertex(-30, -5, -20);
-    vertex(-30, -5, 20);
-    vertex(-30, 5, 20);
-    vertex(-30, 5, -20);
+    texture(imgXN);
+    vertex(-W, -H, -L, 0, 0);
+    vertex(-W, -H, L, 712, 0);
+    vertex(-W, H, L, 712, 357);
+    vertex(-W, H, -L, 0 ,357);
+    endShape();
 
     //X+
+    beginShape(QUADS);
     fill(#ffff00);
-    vertex(30, -5, -20);
-    vertex(30, -5, 20);
-    vertex(30, 5, 20);
-    vertex(30, 5, -20);
+    texture(imgXP);
+    /*vertex(W, -H, -L, 0, 0);
+    vertex(W, -H, L, 712, 0);
+    vertex(W, H, L, 712, 357);
+    vertex(W, H, -L, 0 ,357);*/
+    vertex(W, -H, -L, 712, 0);
+    vertex(W, -H, L, 0, 0);
+    vertex(W, H, L, 0, 357);
+    vertex(W, H, -L, 712 ,357);
+    endShape();
 
     //Y-
+    beginShape(QUADS);
     fill(#ff00ff);
-    vertex(-30, -5, -20);
-    vertex(30, -5, -20);
-    vertex(30, -5, 20);
-    vertex(-30, -5, 20);
+    texture(imgYN);
+    vertex(-W, -H, -L, 0, 0);
+    vertex(W, -H, -L, 363, 0);
+    vertex(W, -H, L, 363, 363);
+    vertex(-W, -H, L, 0 ,363);
+    endShape();
 
     //Y+
+    beginShape(QUADS);
     fill(#00ffff);
-    vertex(-30, 5, -20);
-    vertex(30, 5, -20);
-    vertex(30, 5, 20);
-    vertex(-30, 5, 20);
-
+    texture(imgYP);
+    vertex(-W, H, -L, 0, 0);
+    vertex(W, H, -L, 0, 363);
+    vertex(W, H, L, 363, 363);
+    vertex(-W, H, L, 363 ,0);
     endShape();
 }
 void drawCube()
@@ -69,19 +97,43 @@ void drawCube()
     pushMatrix();
     translate(400, 400, 0);
     scale(4, 4, 4);
+    rotateY(PI);
     rotate(QAxis[0],-QAxis[2],-QAxis[3],-QAxis[1]);
     buildBoxShape();
     popMatrix();
 }
+void buildBackgroundShape()
+{
+    PImage img = loadImage("Form_3Dcuboid/AHRS_Background.jpg");
+    noStroke();
+    beginShape(QUADS);
 
+    //Z+ (绘图?��?)
+    fill(#00ff00);
+    texture(img);
+    vertex(0, 0, 0, 0, 0);
+    vertex(0, 900, 0, 0, 900);
+    vertex(900, 800, 0, 900, 800);
+    vertex(800, 0, 0, 800 ,0);
+
+    endShape();
+}
+void drawBackground()
+{
+    pushMatrix();
+    buildBackgroundShape();
+    popMatrix();
+}
 void readSensors()
 {
   int i;
+  char Start;
   if(mode==0) {
-    while (myPort.available() >= 16)
+    while (myPort.available() >= 17)
     { 
       float receipt_norm;
-      
+      Start = readChar(myPort);
+      if(Start!='@') return;
       Quaternion[0] = readFloat(myPort);
       Quaternion[1] = readFloat(myPort);
       Quaternion[2] = readFloat(myPort);
@@ -154,10 +206,10 @@ void DrawTabAttitude()
   QAxis[2]=-Quaternion[2]/sin(QAxis[0]/2);
   QAxis[3]=-Quaternion[3]/sin(QAxis[0]/2);
  
-  background(#000000);
-  fill(#ffffff);
+  //background(#000000);
+  //fill(#ffffff);
   textFont(font, 20);
-  text("RwAcc (G):\n" + RwAcc[0] + "\n" + RwAcc[1] + "\n" + RwAcc[2] + "\ninterval: " + interval, 20, 50);
+  /*text("RwAcc (G):\n" + RwAcc[0] + "\n" + RwAcc[1] + "\n" + RwAcc[2] + "\ninterval: " + interval, 20, 50);
   text("Gyro (°/s):\n" + Gyro[0] + "\n" + Gyro[1] + "\n" + Gyro[2], 220, 50);
   text("Awz (°):\n" + Awz[0] + "\n" + Awz[1] + "\n" + Awz[2] , 420, 50);
   text("Temperature (°C):\n" + temperature , 20, 180);
@@ -165,24 +217,25 @@ void DrawTabAttitude()
   text("RwMag (Guess):\n" + RwMag[0] + "\n" + RwMag[1] + "\n" + RwMag[2], 20, 310);
   text("DegMag (°):\n" + DegMag[0] + "\n" + DegMag[1] + "\n" + DegMag[2], 20, 440);
   text("NormMag (°):\n" + NormMag[0] + "\n" + NormMag[1] + "\n" + NormMag[2], 20, 570);
-  text("Quat (°):\n" + QAxis[0] + "\n" + QAxis[1] + "\n" + QAxis[2]+ "\n" + QAxis[3], 20, 700);
   text("GyroRange (°/s):\n" + MinGyro[0]+"~"+ MaxGyro[0] + "\n"+ MinGyro[1]+"~"+MaxGyro[1] + "\n"+ MinGyro[2]+"~"+ MaxGyro[2], 620, 50);
   text("AccRange (°/s):\n" + MinAcc[0]+"~"+ MaxAcc[0] + "\n"+ MinAcc[1]+"~"+MaxAcc[1] + "\n"+ MinAcc[2]+"~"+ MaxAcc[2], 620, 180);
   text("RwAccAvg (G):\n" + RwAccAvg[0] + "\n" + RwAccAvg[1] + "\n" + RwAccAvg[2] , 620, 310);
   text("GyroAvg (°):\n" + GyroAvg[0] + "\n" + GyroAvg[1] + "\n" + GyroAvg[2] , 620, 440);
   text("GyroDeg (°):\n" + GyroDeg[0] + "\n" + GyroDeg[1] + "\n" + GyroDeg[2], 620, 570);
-  text("GyroMoveDeg (°):\n" + GyroMoveDeg[0] + "\n" + GyroMoveDeg[1] + "\n" + GyroMoveDeg[2], 620, 700);
-
+  text("GyroMoveDeg (°):\n" + GyroMoveDeg[0] + "\n" + GyroMoveDeg[1] + "\n" + GyroMoveDeg[2], 620, 700);*/
+  text("Quat (°):\n" + QAxis[0] + "\n" + QAxis[1] + "\n" + QAxis[2]+ "\n" + QAxis[3], 20, 700);
+  //drawBackground();
   pushMatrix();
   translate(450, 250, 0);
   stroke(#ffffff);
 
-  line(0, 0, 0, 100, 0, 0);
+  /*line(0, 0, 0, 100, 0, 0);
   line(0, 0, 0, 0, -100, 0);
   line(0, 0, 0, 0, 0, 100);
-  line(0, 0, 0, -RwEst[0]*100, RwEst[1]*100, RwEst[2]*100);
+  line(0, 0, 0, -RwEst[0]*100, RwEst[1]*100, RwEst[2]*100);*/
   popMatrix();
   drawCube();
+  
 }
 void ClickTabAttitude()
 {
@@ -202,5 +255,6 @@ void ClickTabAttitude()
   myPort.write("@ss");  
   println("in attitude tab");
   cursor(ARROW);
+  
 }
 
