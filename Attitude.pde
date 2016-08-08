@@ -13,6 +13,81 @@
  *                                                                            *
  *============================================================================*
  */
+ boolean Texture = true;
+ Button btnTextureSwitch; 
+ public void TextureSwitch(int theValue) {
+  println("->TextureSwitch");
+  if(Texture)
+    Texture = false;
+  else
+    Texture = true;  
+}
+void ButtonTextureSwitch()
+{
+  int offY=700,offX=200;
+   println("->ButtonTextureSwitch");
+     btnTextureSwitch=cp5.addButton("TextureSwitch")
+     .setValue(0)
+     .setPosition(offX,offY)
+     .setSize(130,40)   
+     .setColorBackground(#a060a0)
+     .setColorForeground(#8080d0)
+     .setColorActive(#a0a0f0)
+     .setColorCaptionLabel(#ffff00)
+     .moveTo("ATTITUDE")
+     .hide();
+}
+void buildOldBoxShape()
+{
+    PImage img = loadImage("Form_3Dcuboid/Bottom.png");
+    noStroke();
+    beginShape(QUADS);
+
+    //Z+
+    fill(#00ff00);
+    //texture(img);
+    vertex(-30, -5, 20, 0, 0);
+    vertex(30, -5, 20, 1066, 0);
+    vertex(30, 5, 20, 1066, 712);
+    vertex(-30, 5, 20, 0 ,712);
+
+    //Z-
+    fill(#0000ff);
+    vertex(-30, -5, -20);
+    vertex(30, -5, -20);
+    vertex(30, 5, -20);
+    vertex(-30, 5, -20);
+
+    //X-
+    fill(#ff0000);
+    vertex(-30, -5, -20);
+    vertex(-30, -5, 20);
+    vertex(-30, 5, 20);
+    vertex(-30, 5, -20);
+
+    //X+
+    fill(#ffff00);
+    vertex(30, -5, -20);
+    vertex(30, -5, 20);
+    vertex(30, 5, 20);
+    vertex(30, 5, -20);
+
+    //Y-
+    fill(#ff00ff);
+    vertex(-30, -5, -20);
+    vertex(30, -5, -20);
+    vertex(30, -5, 20);
+    vertex(-30, -5, 20);
+
+    //Y+
+    fill(#00ffff);
+    vertex(-30, 5, -20);
+    vertex(30, 5, -20);
+    vertex(30, 5, 20);
+    vertex(-30, 5, 20);
+
+    endShape();
+}
 void buildBoxShape()
 {
     PImage imgZP = loadImage("Form_3Dcuboid/AHRS_Front.jpg");
@@ -99,7 +174,10 @@ void drawCube()
     scale(4, 4, 4);
     rotateY(PI);
     rotate(QAxis[0],-QAxis[2],-QAxis[3],-QAxis[1]);
-    buildBoxShape();
+    if(Texture)
+      buildBoxShape();  
+    else
+      buildOldBoxShape();
     popMatrix();
 }
 void buildBackgroundShape()
@@ -248,6 +326,7 @@ void ClickTabAttitude()
   Motor[3].hide();
   MotorLable[3].hide();
   background(0);
+  btnTextureSwitch.show();
   myPort.write("@sp"); 
   myPort.write("@mq"); 
   delay(100);

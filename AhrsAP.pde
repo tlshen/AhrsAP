@@ -247,10 +247,10 @@ void CP5_init()
   MotorBar();
   PID_BOX();
   CalibrationBox();
+  ButtonTextureSwitch();
   ButtonVelocity();
   ButtonGPS();
   SliderRC();
-  ButtonAHRSReport();
 }
 void SetupBackground()
 {
