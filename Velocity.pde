@@ -204,9 +204,12 @@ float GetMotionArrayVarience(int axis)
 void readVelocity()
 {
   int i;
+  char Start;
   if(vstate<2) {
     while (myPort.available() >= 4*VelocityTabLength)
     { 
+      Start = readChar(myPort);
+      if(Start!='@') return;
       for(i=0;i<VelocityTabLength;i++)
         Velocity[i] = readFloat(myPort);
       }
