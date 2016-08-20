@@ -15,9 +15,14 @@
  */
 cGraph g_graph =  new cGraph(50,50, 800, 500);
 float[] Velocity = new float[6];
+short[] mrRawData = new short[9];
 cDataArray[] myInputArray = {new cDataArray(200), new cDataArray(200), new cDataArray(200),
 new cDataArray(200), new cDataArray(200), new cDataArray(200)};
-
+Button btnBaro;
+Button btnVelocity;
+Button btnRaw;
+char vstate;
+int VelocityTabLength=6;
 class cGraph {
   float m_gWidth, m_gHeight, m_gLeft, m_gBottom, m_gRight, m_gTop;
   cGraph(float x, float y, float w, float h) {
@@ -106,6 +111,7 @@ void Baro()
   myPort.write("@ss");
   VelocityTabLength = 4;
   StartCounter = 0;
+  vstate = 0;
 }
 void Velocity() 
 {
@@ -117,6 +123,19 @@ void Velocity()
   delay(100);
   myPort.write("@ss");
   VelocityTabLength = 6;
+  vstate = 1;
+}
+void Raw() 
+{
+  String token; 
+  myPort.write("@sp");
+  delay(100);
+  myPort.clear();
+  myPort.write("@mr");
+  delay(100);
+  myPort.write("@ss");
+  VelocityTabLength = 9;
+  vstate = 2;
 }
 void ButtonVelocity()
 {
@@ -135,6 +154,17 @@ void ButtonVelocity()
    btnVelocity=cp5.addButton("Velocity")
      .setValue(0)
      .setPosition(offX+200,offY)
+     .setSize(120,80)   
+     .setColorBackground(#6060a0)
+     .setColorForeground(#8080d0)
+     .setColorActive(#a0a0f0)
+     .setColorCaptionLabel(#ffff00)
+     .moveTo("Velocity")
+     .hide();
+     
+     btnRaw=cp5.addButton("Raw")
+     .setValue(0)
+     .setPosition(offX+400,offY)
      .setSize(120,80)   
      .setColorBackground(#6060a0)
      .setColorForeground(#8080d0)
@@ -174,24 +204,36 @@ float GetMotionArrayVarience(int axis)
 void readVelocity()
 {
   int i;
-  while (myPort.available() >= 4*VelocityTabLength)
-  { 
-    for(i=0;i<VelocityTabLength;i++)
-      Velocity[i] = readFloat(myPort);
-    }
+  char Start;
+  if(vstate<2) {
+    while (myPort.available() >= 4*VelocityTabLength)
+    { 
+      Start = readChar(myPort);
+      if(Start!='@') return;
+      for(i=0;i<VelocityTabLength;i++)
+        Velocity[i] = readFloat(myPort);
+      }
+  }
+  else {
+    while (myPort.available() >= 2*VelocityTabLength)
+    { 
+      for(i=0;i<VelocityTabLength;i++)
+        mrRawData[i] = readInt16(myPort);
+      }
+  }
 }
 void DrawTabVelocity()
 {
   background(#000000);
     fill(#ffffff);
     readVelocity();
-    if(VelocityTabLength==6) {
+    if(vstate==1) {
       addMotionArray(0, Velocity[0]*100);
       addMotionArray(1, Velocity[1]*100);
       addMotionArray(2, Velocity[2]*100);
       println(Velocity[0]+"   "+Velocity[1]+"     "+Velocity[2]);
     }
-    else {
+    else if(vstate==0) {
       if(StartCounter++<20)
         StartAlt = StartAlt*0.5 + 0.5*Velocity[3];
  
@@ -202,16 +244,25 @@ void DrawTabVelocity()
       println(Velocity[3]);
       text("MEAN:" + GetMotionArrayMean(3) + "\nVarience:" + GetMotionArrayVarience(3), 320, 700);
     }
+    else {
+      addMotionArray(0, mrRawData[3]);
+      addMotionArray(1, mrRawData[4]);
+      addMotionArray(2, mrRawData[5]);
+      println(mrRawData[3]+"   "+mrRawData[4]+"     "+mrRawData[5]);
+    }
     drawMotionGraph();
 }
 void ClickTabVelocity()
 {
   btnBaro.show();
   btnVelocity.show();
-  if(VelocityTabLength==6)
+  btnRaw.show();
+  if(vstate==1)
     Velocity();
-  else
+  else if(vstate==0)
     Baro();
+  else
+    Raw();
   
   cursor(ARROW);
 }

@@ -25,9 +25,6 @@ Button[] btnSetPID = new Button[3];
 Button btnStorePID; 
 Button btnLoadPID;
 Button btnResetPID; 
-Button btnBaro;
-Button btnVelocity;
-int VelocityTabLength=6;
 int StartCounter;
 String[][] PID_NumBox = {
 {"P_ROLL", "I_ROLL", "D_ROLL"},
